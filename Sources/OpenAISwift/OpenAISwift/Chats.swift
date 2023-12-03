@@ -35,7 +35,7 @@ extension OpenAISwift {
                          presencePenalty: Double? = 0,
                          frequencyPenalty: Double? = 0,
                          logitBias: [Int: Double]? = nil,
-                         tools: [Tools]? = nil,
+                         tools: [Tool]? = nil,
                          completionHandler: @escaping (Result<OpenAI<MessageResult>, OpenAIError>) -> Void) {
         let endpoint = OpenAIEndpointProvider.API.chat
         let body = ChatConversation(user: user,
@@ -133,6 +133,7 @@ extension OpenAISwift {
                                   presencePenalty: Double? = 0,
                                   frequencyPenalty: Double? = 0,
                                   logitBias: [Int: Double]? = nil,
+                                  tools: [Tool]? = nil,
                                   onEventReceived: ((Result<OpenAI<StreamMessageResult>, OpenAIError>) -> Void)? = nil,
                                   onComplete: (() -> Void)? = nil) {
         let endpoint = OpenAIEndpointProvider.API.chat
@@ -147,6 +148,7 @@ extension OpenAISwift {
                                     presencePenalty: presencePenalty,
                                     frequencyPenalty: frequencyPenalty,
                                     logitBias: logitBias,
+                                    tools: tools,
                                     stream: true)
         let request = prepareRequest(endpoint, body: body, queryItems: nil)
         handler.onEventReceived = onEventReceived
@@ -217,7 +219,7 @@ extension OpenAISwift {
                          presencePenalty: Double? = 0,
                          frequencyPenalty: Double? = 0,
                          logitBias: [Int: Double]? = nil,
-                         tools: [Tools]? = nil) async throws -> OpenAI<MessageResult> {
+                         tools: [Tool]? = nil) async throws -> OpenAI<MessageResult> {
         return try await withCheckedThrowingContinuation { continuation in
             sendChat(with: messages,
                      model: model,

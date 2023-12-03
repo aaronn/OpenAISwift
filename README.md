@@ -149,7 +149,7 @@ do {
         presencePenalty: nil,           // optional `Double?`
         frequencyPenalty: nil,          // optional `Double?`
         logitBias: nil                  // optional `[Int: Double]?` (see inline documentation)
-        tools: nil                      // optional `[Tools]?`
+        tools: nil                      // optional `[Tool]?`
     )
     // use result
 } catch {

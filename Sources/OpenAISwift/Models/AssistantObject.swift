@@ -30,13 +30,28 @@ public struct FunctionTool: Codable {
     public let function: FunctionObject
 }
 
-public struct Tools: Codable {
+public struct Tool: Codable {
     public let codeInterpreterTool: CodeInterpreterTool?
     public let retrievalTool: RetrievalTool?
     public let functionTool: FunctionTool?
 
     enum CodingKeys: String, CodingKey {
         case type, function
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let type = try container.decode(String.self, forKey: .type)
+        switch type {
+        case "function":
+            let function = try container.decode(FunctionObject.self, forKey: .function)
+            self.functionTool = FunctionTool(type: type, function: function)
+            self.codeInterpreterTool = nil
+            self.retrievalTool = nil
+        // Add cases for other tool types
+        default:
+            throw DecodingError.dataCorruptedError(forKey: .type, in: container, debugDescription: "Unknown tool type")
+        }
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -57,7 +72,7 @@ public struct AssistantObject: Codable {
     public let description: String?
     public let model: String
     public let instructions: String?
-    public let tools: [Tools]
+    public let tools: Tool
     public let file_ids: [String]
     public let metadata: [String:String]
 }
@@ -67,7 +82,7 @@ public struct AssistantBody: Codable {
     public let name: String?
     public let description: String?
     public let instructions: String?
-    public let tools: [Tools]?
+    public let tools: [Tool]?
     public let file_ids: [String]?
     public let metadata: [String:String]?
 }

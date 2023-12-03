@@ -66,7 +66,7 @@ public struct RunRequest: Codable {
     public let assistant_id: String
     public let model: String?
     public let instructions: String?
-    public let tools: [Tools]?
+    public let tools: [Tool]?
     public let metadata: [String:String]?
 }
 
@@ -80,7 +80,7 @@ public struct ThreadRunRequest: Codable {
     public let thread: ThreadRun?
     public let model: String?
     public let instructions: String?
-    public let tools: [Tools]?
+    public let tools: [Tool]?
     public let metadata: [String:String]?
 }
 

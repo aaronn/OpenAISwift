@@ -43,7 +43,7 @@ public struct ChatMessage: Codable, Identifiable {
         self.toolCalls = toolCalls
     }
 
-    enum CodingKeys: CodingKey {
+    enum CodingKeys: String, CodingKey {
         case id
         case role
         case content
@@ -57,6 +57,7 @@ public struct ChatMessage: Codable, Identifiable {
         self.id = UUID()
         self.role = try container.decodeIfPresent(ChatRole.self, forKey: ChatMessage.CodingKeys.role)
         self.content = try container.decodeIfPresent(String.self, forKey: ChatMessage.CodingKeys.content)
+        self.toolCalls = try container.decodeIfPresent([ToolCall].self, forKey: ChatMessage.CodingKeys.toolCalls)
 
     }
 
@@ -115,7 +116,7 @@ public struct ChatConversation: Encodable {
 
     /// Takes an optional array of tools used in function calling. See OpenAI documentation for details and schema.
     /// https://platform.openai.com/docs/guides/function-calling
-    let tools: [Tools]?
+    let tools: [Tool]?
 
     /// If you're generating long completions, waiting for the response can take many seconds. To get responses sooner, you can 'stream' the completion as it's being generated. This allows you to start printing or processing the beginning of the completion before the full completion is finished.
     /// https://github.com/openai/openai-cookbook/blob/main/examples/How_to_stream_completions.ipynb
