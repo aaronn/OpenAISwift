@@ -66,6 +66,7 @@ public struct ChatMessage: Codable, Identifiable {
 
         try container.encodeIfPresent(self.role, forKey: ChatMessage.CodingKeys.role)
         try container.encodeIfPresent(self.content, forKey: ChatMessage.CodingKeys.content)
+        try container.encodeIfPresent(self.toolCalls, forKey: ChatMessage.CodingKeys.toolCalls)
 
     }
 }
