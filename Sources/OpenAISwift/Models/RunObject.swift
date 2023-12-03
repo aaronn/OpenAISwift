@@ -13,7 +13,7 @@ public enum RunObjectStatus: String, Codable {
     case queued, in_progress, requires_action, cancelling, cancelled, failed, completed, expired
 }
 
-public struct ToolCallsFunction: Codable {
+public struct ToolCallFunction: Codable {
     public let name: String
     public let arguments: String
 }
@@ -23,14 +23,14 @@ public struct ToolsOutput: Codable {
     public let output: String
 }
 
-public struct ToolCalls: Codable {
+public struct ToolCall: Codable {
     public let id: String
     public let type: String         //   always = "function"
-    public let function: ToolCallsFunction
+    public let function: ToolCallFunction
 }
 
 public struct SubmitToolOutputs: Codable {
-    public let tool_calls: [ToolCalls]
+    public let tool_calls: [ToolCall]
 }
 
 public struct RequiredAction: Codable {

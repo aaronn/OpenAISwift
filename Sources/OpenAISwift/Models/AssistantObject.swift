@@ -36,14 +36,14 @@ public struct Tools: Codable {
     public let functionTool: FunctionTool?
 
     enum CodingKeys: String, CodingKey {
-        case type, function = "functionTool"
+        case type, function
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         if let functionTool = functionTool {
             try container.encode("function", forKey: .type)
-            try container.encode(functionTool, forKey: .function)
+            try container.encode(functionTool.function, forKey: .function)
         }
         // Todo: Add similar handling for codeInterpreterTool and retrievalTool.
     }

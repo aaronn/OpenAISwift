@@ -30,20 +30,24 @@ public struct ChatMessage: Codable, Identifiable {
     public let role: ChatRole?
     /// The content of the message.
     public let content: String?
+    /// Any tools attempting to be called.
+    public let toolCalls: [ToolCall]?
 
     /// Creates a new chat message with a given role and content.
     /// - Parameters:
     ///   - role: The role of the sender of the message.
     ///   - content: The content of the message.
-    public init(role: ChatRole, content: String) {
+    public init(role: ChatRole, content: String, toolCalls: [ToolCall]? = nil) {
         self.role = role
         self.content = content
+        self.toolCalls = toolCalls
     }
 
     enum CodingKeys: CodingKey {
         case id
         case role
         case content
+        case toolCalls = "tool_calls"
     }
 
     public init(from decoder: Decoder) throws {
