@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct CodeInterpretorTool: Codable {
+public struct CodeInterpreterTool: Codable {
     public let type: String
 }
 
@@ -31,12 +31,23 @@ public struct FunctionTool: Codable {
 }
 
 public struct Tools: Codable {
-    public let codeInterpretorTool: CodeInterpretorTool?
+    public let codeInterpreterTool: CodeInterpreterTool?
     public let retrievalTool: RetrievalTool?
     public let functionTool: FunctionTool?
+
+    enum CodingKeys: String, CodingKey {
+        case type, function = "functionTool"
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        if let functionTool = functionTool {
+            try container.encode("function", forKey: .type)
+            try container.encode(functionTool, forKey: .function)
+        }
+        // Todo: Add similar handling for codeInterpreterTool and retrievalTool.
+    }
 }
-
-
 
 public struct AssistantObject: Codable {
     public let id: String

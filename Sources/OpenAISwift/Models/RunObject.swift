@@ -15,7 +15,7 @@ public enum RunObjectStatus: String, Codable {
 
 public struct ToolCallsFunction: Codable {
     public let name: String
-    public let arguements: String
+    public let arguments: String
 }
 
 public struct ToolsOutput: Codable {
@@ -56,7 +56,7 @@ public struct RunObject: Codable {
     public let stared_at: Int?
     public let cancelled_at: Int?
     public let failed_at: Int?
-    public let compelted_at: Int?
+    public let completed_at: Int?
     public let model: String
     public let instructions: String
     public let metadata: [String:String] // 16 key value pairs. key Max 64 chars, value Max 512 chars.
@@ -72,7 +72,7 @@ public struct RunRequest: Codable {
 
 public struct ThreadRun: Codable {
     public let messages: [Message]?
-    public let metadate: [String:String]?
+    public let metadata: [String:String]?
 }
 
 public struct ThreadRunRequest: Codable {
@@ -81,7 +81,7 @@ public struct ThreadRunRequest: Codable {
     public let model: String?
     public let instructions: String?
     public let tools: [Tools]?
-    public let metatdata: [String:String]?
+    public let metadata: [String:String]?
 }
 
 public struct MessageID: Codable {
@@ -94,7 +94,7 @@ public struct MessageCreation: Codable {
 }
 
 public struct MessageToolCallsTypes: Codable {
-    public let code_interpretor: CodeInterpretorTool?
+    public let code_interpreter: CodeInterpreterTool?
     public let retrieval_tool: RetrievalTool?
     public let function_tool: FunctionTool?
 }
