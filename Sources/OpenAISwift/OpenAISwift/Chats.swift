@@ -51,7 +51,6 @@ extension OpenAISwift {
                                     logitBias: logitBias,
                                     tools: tools,
                                     stream: false)
-
         let request = prepareRequest(endpoint, body: body, queryItems: nil)
 
         makeRequest(request: request) { result in
@@ -88,6 +87,7 @@ extension OpenAISwift {
                          presencePenalty: Double? = 0,
                          frequencyPenalty: Double? = 0,
                          logitBias: [Int: Double]? = nil,
+                         tools: [Tool]? = nil,
                          completionHandler: @escaping (Result<OpenAI<MessageResult>, OpenAIError>) -> Void) {
         guard let model = OpenAIEndpointModelType.ChatCompletions(rawValue: model.modelName) else {
             preconditionFailure("Model \(model.modelName) not supported")
@@ -104,6 +104,7 @@ extension OpenAISwift {
             presencePenalty: presencePenalty,
             frequencyPenalty: frequencyPenalty,
             logitBias: logitBias,
+            tools: tools,
             completionHandler: completionHandler)
     }
 
@@ -255,7 +256,8 @@ extension OpenAISwift {
                          maxTokens: Int? = nil,
                          presencePenalty: Double? = 0,
                          frequencyPenalty: Double? = 0,
-                         logitBias: [Int: Double]? = nil) async throws -> OpenAI<MessageResult> {
+                         logitBias: [Int: Double]? = nil,
+                         tools: [Tool]? = nil) async throws -> OpenAI<MessageResult> {
         guard let model = OpenAIEndpointModelType.ChatCompletions(rawValue: model.modelName) else {
             preconditionFailure("Model \(model.modelName) not supported")
         }
@@ -269,7 +271,8 @@ extension OpenAISwift {
                                   maxTokens: maxTokens,
                                   presencePenalty: presencePenalty,
                                   frequencyPenalty: frequencyPenalty,
-                                  logitBias: logitBias)
+                                  logitBias: logitBias,
+                                  tools: tools)
     }
     
     /// Send a Chat request to the OpenAI API with stream enabled

@@ -9,25 +9,52 @@ import Foundation
 
 public struct CodeInterpreterTool: Codable {
     public let type: String
+
+    public init(type: String) {
+        self.type = type
+    }
 }
 
 public struct RetrievalTool: Codable {
     public let type: String
+
+    public init(type: String) {
+        self.type = type
+    }
 }
 
 public struct ParamJSONObject: Codable {
-    public let properties: String
+    public let type: String //
+    public let properties: [String: String]
+    public let required: [String]
+
+    public init(type: String = "object", properties: [String: String] = [:], required: [String] = []) {
+        self.type = type
+        self.properties = properties
+        self.required = required
+    }
 }
 
 public struct FunctionObject: Codable {
     public let description: String
     public let name: String
     public let parameters: ParamJSONObject
+
+    public init(description: String, name: String, parameters: ParamJSONObject) {
+        self.description = description
+        self.name = name
+        self.parameters = parameters
+    }
 }
 
 public struct FunctionTool: Codable {
     public let type: String
     public let function: FunctionObject
+
+    public init(type: String, function: FunctionObject) {
+        self.type = type
+        self.function = function
+    }
 }
 
 public struct Tool: Codable {
@@ -61,6 +88,12 @@ public struct Tool: Codable {
             try container.encode(functionTool.function, forKey: .function)
         }
         // Todo: Add similar handling for codeInterpreterTool and retrievalTool.
+    }
+
+    public init(codeInterpreterTool: CodeInterpreterTool?, retrievalTool: RetrievalTool?, functionTool: FunctionTool?) {
+        self.codeInterpreterTool = codeInterpreterTool
+        self.retrievalTool = retrievalTool
+        self.functionTool = functionTool
     }
 }
 
