@@ -15,8 +15,6 @@ public enum ChatRole: String, Codable {
     case user
     /// The role for the artificial assistant who responds to the user.
     case assistant
-    /// The role for a called tool response.
-    case tool
 }
 
 /// A structure that represents a single message in a chat conversation.

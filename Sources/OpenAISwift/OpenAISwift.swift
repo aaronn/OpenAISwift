@@ -54,6 +54,7 @@ public class OpenAISwift {
 extension OpenAISwift {
 
     func makeRequest(request: URLRequest, completionHandler: @escaping (Result<Data, Error>) -> Void) {
+        print(String(data:request.httpBody!, encoding:.utf8))
         let session = config.session
         let task = session.dataTask(with: request) { (data, response, error) in
             if let error = error {
