@@ -185,7 +185,7 @@ extension OpenAISwift {
     ///
     ///   - completionHandler: Returns the modified run object for the specified ID.
 
-    public func runsSubmit(thread_id: String, run_id:String, tools_output: [ToolsOutput], completionHandler: @escaping (Result<OpenAI<UrlResult>, OpenAIError>) -> Void) {
+    public func runsSubmit(thread_id: String, run_id:String, tools_output: [ToolOutput], completionHandler: @escaping (Result<OpenAI<UrlResult>, OpenAIError>) -> Void) {
         
         let endpoint = OpenAIEndpointProvider.API.runs_submit
         

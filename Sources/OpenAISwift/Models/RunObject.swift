@@ -18,7 +18,7 @@ public struct ToolCallFunction: Codable {
     public let arguments: String
 }
 
-public struct ToolsOutput: Codable {
+public struct ToolOutput: Codable {
     public let tool_call_id: String
     public let output: String
 }

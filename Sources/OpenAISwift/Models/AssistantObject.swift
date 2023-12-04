@@ -72,7 +72,7 @@ public struct AssistantObject: Codable {
     public let description: String?
     public let model: String
     public let instructions: String?
-    public let tools: Tool
+    public let tools: [Tool]
     public let file_ids: [String]
     public let metadata: [String:String]
 }
