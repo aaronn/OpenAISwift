@@ -28,7 +28,7 @@ public struct ParamJSONObject: Codable {
     public let properties: [String: [String: String]]
     public let required: [String]
 
-    public init(type: String = "object", properties: [String: String] = [:], required: [String] = []) {
+    public init(type: String = "object", properties: [String: [String: String]] = [:], required: [String] = []) {
         self.type = type
         self.properties = properties
         self.required = required
