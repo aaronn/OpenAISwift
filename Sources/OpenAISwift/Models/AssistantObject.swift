@@ -25,7 +25,7 @@ public struct RetrievalTool: Codable {
 
 public struct ParamJSONObject: Codable {
     public let type: String //
-    public let properties: [String: String]
+    public let properties: [String: [String: String]]
     public let required: [String]
 
     public init(type: String = "object", properties: [String: String] = [:], required: [String] = []) {
