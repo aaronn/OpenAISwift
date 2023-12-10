@@ -15,7 +15,7 @@ public enum RunObjectStatus: String, Codable {
 
 public struct ToolCallFunction: Codable {
     public let name: String
-    public let arguments: String
+    public let arguments: [String:String]
 }
 
 public struct ToolOutput: Codable {
