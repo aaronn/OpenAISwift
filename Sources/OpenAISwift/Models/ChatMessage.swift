@@ -28,20 +28,24 @@ public struct ChatMessage: Codable, Identifiable {
     public let role: ChatRole?
     /// The content of the message.
     public let content: String?
+    /// Any tools attempting to be called.
+    public let toolCalls: [ToolCall]?
 
     /// Creates a new chat message with a given role and content.
     /// - Parameters:
     ///   - role: The role of the sender of the message.
     ///   - content: The content of the message.
-    public init(role: ChatRole, content: String) {
+    public init(role: ChatRole, content: String, toolCalls: [ToolCall]? = nil) {
         self.role = role
         self.content = content
+        self.toolCalls = toolCalls
     }
 
-    enum CodingKeys: CodingKey {
+    enum CodingKeys: String, CodingKey {
         case id
         case role
         case content
+        case toolCalls = "tool_calls"
     }
 
     public init(from decoder: Decoder) throws {
@@ -51,6 +55,7 @@ public struct ChatMessage: Codable, Identifiable {
         self.id = UUID()
         self.role = try container.decodeIfPresent(ChatRole.self, forKey: ChatMessage.CodingKeys.role)
         self.content = try container.decodeIfPresent(String.self, forKey: ChatMessage.CodingKeys.content)
+        self.toolCalls = try container.decodeIfPresent([ToolCall].self, forKey: ChatMessage.CodingKeys.toolCalls)
 
     }
 
@@ -59,6 +64,7 @@ public struct ChatMessage: Codable, Identifiable {
 
         try container.encodeIfPresent(self.role, forKey: ChatMessage.CodingKeys.role)
         try container.encodeIfPresent(self.content, forKey: ChatMessage.CodingKeys.content)
+        try container.encodeIfPresent(self.toolCalls, forKey: ChatMessage.CodingKeys.toolCalls)
 
     }
 }
@@ -107,6 +113,10 @@ public struct ChatConversation: Encodable {
     /// Modify the likelihood of specified tokens appearing in the completion. Maps tokens (specified by their token ID in the OpenAI Tokenizer—not English words) to an associated bias value from -100 to 100. Values between -1 and 1 should decrease or increase likelihood of selection; values like -100 or 100 should result in a ban or exclusive selection of the relevant token.
     let logitBias: [Int: Double]?
 
+    /// Takes an optional array of tools used in function calling. See OpenAI documentation for details and schema.
+    /// https://platform.openai.com/docs/guides/function-calling
+    let tools: [Tool]?
+
     /// If you're generating long completions, waiting for the response can take many seconds. To get responses sooner, you can 'stream' the completion as it's being generated. This allows you to start printing or processing the beginning of the completion before the full completion is finished.
     /// https://github.com/openai/openai-cookbook/blob/main/examples/How_to_stream_completions.ipynb
     let stream: Bool?
@@ -123,6 +133,7 @@ public struct ChatConversation: Encodable {
         case presencePenalty = "presence_penalty"
         case frequencyPenalty = "frequency_penalty"
         case logitBias = "logit_bias"
+        case tools = "tools"
         case stream
     }
 }

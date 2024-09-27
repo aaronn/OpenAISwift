@@ -13,24 +13,24 @@ public enum RunObjectStatus: String, Codable {
     case queued, in_progress, requires_action, cancelling, cancelled, failed, completed, expired
 }
 
-public struct ToolCallsFunction: Codable {
+public struct ToolCallFunction: Codable {
     public let name: String
-    public let arguements: String
+    public let arguments: String // JSON String
 }
 
-public struct ToolsOutput: Codable {
+public struct ToolOutput: Codable {
     public let tool_call_id: String
     public let output: String
 }
 
-public struct ToolCalls: Codable {
+public struct ToolCall: Codable {
     public let id: String
     public let type: String         //   always = "function"
-    public let function: ToolCallsFunction
+    public let function: ToolCallFunction
 }
 
 public struct SubmitToolOutputs: Codable {
-    public let tool_calls: [ToolCalls]
+    public let tool_calls: [ToolCall]
 }
 
 public struct RequiredAction: Codable {
@@ -56,7 +56,7 @@ public struct RunObject: Codable {
     public let stared_at: Int?
     public let cancelled_at: Int?
     public let failed_at: Int?
-    public let compelted_at: Int?
+    public let completed_at: Int?
     public let model: String
     public let instructions: String
     public let metadata: [String:String] // 16 key value pairs. key Max 64 chars, value Max 512 chars.
@@ -66,13 +66,13 @@ public struct RunRequest: Codable {
     public let assistant_id: String
     public let model: String?
     public let instructions: String?
-    public let tools: [Tools]?
+    public let tools: [Tool]?
     public let metadata: [String:String]?
 }
 
 public struct ThreadRun: Codable {
     public let messages: [Message]?
-    public let metadate: [String:String]?
+    public let metadata: [String:String]?
 }
 
 public struct ThreadRunRequest: Codable {
@@ -80,8 +80,8 @@ public struct ThreadRunRequest: Codable {
     public let thread: ThreadRun?
     public let model: String?
     public let instructions: String?
-    public let tools: [Tools]?
-    public let metatdata: [String:String]?
+    public let tools: [Tool]?
+    public let metadata: [String:String]?
 }
 
 public struct MessageID: Codable {
@@ -94,7 +94,7 @@ public struct MessageCreation: Codable {
 }
 
 public struct MessageToolCallsTypes: Codable {
-    public let code_interpretor: CodeInterpretorTool?
+    public let code_interpreter: CodeInterpreterTool?
     public let retrieval_tool: RetrievalTool?
     public let function_tool: FunctionTool?
 }

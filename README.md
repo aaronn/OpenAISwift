@@ -148,7 +148,8 @@ do {
         maxTokens: nil,                 // optional `Int?`
         presencePenalty: nil,           // optional `Double?`
         frequencyPenalty: nil,          // optional `Double?`
-        logitBias: nil                 // optional `[Int: Double]?` (see inline documentation)
+        logitBias: nil                  // optional `[Int: Double]?` (see inline documentation)
+        tools: nil                      // optional `[Tool]?`
     )
     // use result
 } catch {

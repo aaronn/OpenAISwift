@@ -31,7 +31,7 @@ extension OpenAISwift {
     ///
     ///   - completionHandler: Returns a Run Object
 
-    public func createRun(thread_id: String, assistant_id: String, model: String?, instructions: String?, tools: [Tools]?, metadata: [String:String]? , completionHandler: @escaping (Result<OpenAI<UrlResult>, OpenAIError>) -> Void) {
+    public func createRun(thread_id: String, assistant_id: String, model: String?, instructions: String?, tools: [Tool]?, metadata: [String:String]? , completionHandler: @escaping (Result<OpenAI<UrlResult>, OpenAIError>) -> Void) {
         
         let endpoint = OpenAIEndpointProvider.API.runs_create
         
@@ -185,7 +185,7 @@ extension OpenAISwift {
     ///
     ///   - completionHandler: Returns the modified run object for the specified ID.
 
-    public func runsSubmit(thread_id: String, run_id:String, tools_output: [ToolsOutput], completionHandler: @escaping (Result<OpenAI<UrlResult>, OpenAIError>) -> Void) {
+    public func runsSubmit(thread_id: String, run_id:String, tools_output: [ToolOutput], completionHandler: @escaping (Result<OpenAI<UrlResult>, OpenAIError>) -> Void) {
         
         let endpoint = OpenAIEndpointProvider.API.runs_submit
         
@@ -252,11 +252,11 @@ extension OpenAISwift {
     ///   
     ///   - completionHandler: A Run Object.
 
-    public func createThreadRun(assistant_id: String, thread: ThreadRun?, model:String?, instructions: String?, tools: [Tools]?, metadata: [String:String]?, completionHandler: @escaping (Result<OpenAI<UrlResult>, OpenAIError>) -> Void) {
+    public func createThreadRun(assistant_id: String, thread: ThreadRun?, model:String?, instructions: String?, tools: [Tool]?, metadata: [String:String]?, completionHandler: @escaping (Result<OpenAI<UrlResult>, OpenAIError>) -> Void) {
         
         let endpoint = OpenAIEndpointProvider.API.runs_thread_create
         
-        let body = ThreadRunRequest(assistant_id: assistant_id, thread: thread, model: model, instructions: instructions, tools: tools, metatdata: metadata)
+        let body = ThreadRunRequest(assistant_id: assistant_id, thread: thread, model: model, instructions: instructions, tools: tools, metadata: metadata)
         
         let request = prepareRequest(endpoint, body: body, queryItems: nil)
 

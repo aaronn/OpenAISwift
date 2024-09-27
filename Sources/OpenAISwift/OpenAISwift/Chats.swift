@@ -22,6 +22,7 @@ extension OpenAISwift {
     ///   - presencePenalty: Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.
     ///   - frequencyPenalty: Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim.
     ///   - logitBias: Modify the likelihood of specified tokens appearing in the completion. Maps tokens (specified by their token ID in the OpenAI Tokenizer—not English words) to an associated bias value from -100 to 100. Values between -1 and 1 should decrease or increase likelihood of selection; values like -100 or 100 should result in a ban or exclusive selection of the relevant token.
+    ///   - tools: Takes an optional array of tools used in function calling. See OpenAI documentation for details and schema.
     ///   - completionHandler: Returns an OpenAI Data Model
     public func sendChat(with messages: [ChatMessage],
                          model: OpenAIEndpointModelType.ChatCompletions = .gpt35Turbo,
@@ -34,6 +35,7 @@ extension OpenAISwift {
                          presencePenalty: Double? = 0,
                          frequencyPenalty: Double? = 0,
                          logitBias: [Int: Double]? = nil,
+                         tools: [Tool]? = nil,
                          completionHandler: @escaping (Result<OpenAI<MessageResult>, OpenAIError>) -> Void) {
         let endpoint = OpenAIEndpointProvider.API.chat
         let body = ChatConversation(user: user,
@@ -47,8 +49,8 @@ extension OpenAISwift {
                                     presencePenalty: presencePenalty,
                                     frequencyPenalty: frequencyPenalty,
                                     logitBias: logitBias,
+                                    tools: tools,
                                     stream: false)
-
         let request = prepareRequest(endpoint, body: body, queryItems: nil)
 
         makeRequest(request: request) { result in
@@ -85,6 +87,7 @@ extension OpenAISwift {
                          presencePenalty: Double? = 0,
                          frequencyPenalty: Double? = 0,
                          logitBias: [Int: Double]? = nil,
+                         tools: [Tool]? = nil,
                          completionHandler: @escaping (Result<OpenAI<MessageResult>, OpenAIError>) -> Void) {
         guard let model = OpenAIEndpointModelType.ChatCompletions(rawValue: model.modelName) else {
             preconditionFailure("Model \(model.modelName) not supported")
@@ -101,6 +104,7 @@ extension OpenAISwift {
             presencePenalty: presencePenalty,
             frequencyPenalty: frequencyPenalty,
             logitBias: logitBias,
+            tools: tools,
             completionHandler: completionHandler)
     }
 
@@ -130,6 +134,7 @@ extension OpenAISwift {
                                   presencePenalty: Double? = 0,
                                   frequencyPenalty: Double? = 0,
                                   logitBias: [Int: Double]? = nil,
+                                  tools: [Tool]? = nil,
                                   onEventReceived: ((Result<OpenAI<StreamMessageResult>, OpenAIError>) -> Void)? = nil,
                                   onComplete: (() -> Void)? = nil) {
         let endpoint = OpenAIEndpointProvider.API.chat
@@ -144,6 +149,7 @@ extension OpenAISwift {
                                     presencePenalty: presencePenalty,
                                     frequencyPenalty: frequencyPenalty,
                                     logitBias: logitBias,
+                                    tools: tools,
                                     stream: true)
         let request = prepareRequest(endpoint, body: body, queryItems: nil)
         handler.onEventReceived = onEventReceived
@@ -199,6 +205,7 @@ extension OpenAISwift {
     ///   - presencePenalty: Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.
     ///   - frequencyPenalty: Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim.
     ///   - logitBias: Modify the likelihood of specified tokens appearing in the completion. Maps tokens (specified by their token ID in the OpenAI Tokenizer—not English words) to an associated bias value from -100 to 100. Values between -1 and 1 should decrease or increase likelihood of selection; values like -100 or 100 should result in a ban or exclusive selection of the relevant token.
+    ///   - tools: Takes an optional array of tools used in function calling. See OpenAI documentation for details and schema.
     ///   - completionHandler: Returns an OpenAI Data Model
     @available(swift 5.5)
     @available(macOS 10.15, iOS 13, watchOS 6, tvOS 13, *)
@@ -212,7 +219,8 @@ extension OpenAISwift {
                          maxTokens: Int? = nil,
                          presencePenalty: Double? = 0,
                          frequencyPenalty: Double? = 0,
-                         logitBias: [Int: Double]? = nil) async throws -> OpenAI<MessageResult> {
+                         logitBias: [Int: Double]? = nil,
+                         tools: [Tool]? = nil) async throws -> OpenAI<MessageResult> {
         return try await withCheckedThrowingContinuation { continuation in
             sendChat(with: messages,
                      model: model,
@@ -224,7 +232,8 @@ extension OpenAISwift {
                      maxTokens: maxTokens,
                      presencePenalty: presencePenalty,
                      frequencyPenalty: frequencyPenalty,
-                     logitBias: logitBias) { result in
+                     logitBias: logitBias,
+                     tools: tools) { result in
                 switch result {
                 case .success: continuation.resume(with: result)
                 case .failure(let failure): continuation.resume(throwing: failure)
@@ -247,7 +256,8 @@ extension OpenAISwift {
                          maxTokens: Int? = nil,
                          presencePenalty: Double? = 0,
                          frequencyPenalty: Double? = 0,
-                         logitBias: [Int: Double]? = nil) async throws -> OpenAI<MessageResult> {
+                         logitBias: [Int: Double]? = nil,
+                         tools: [Tool]? = nil) async throws -> OpenAI<MessageResult> {
         guard let model = OpenAIEndpointModelType.ChatCompletions(rawValue: model.modelName) else {
             preconditionFailure("Model \(model.modelName) not supported")
         }
@@ -261,7 +271,8 @@ extension OpenAISwift {
                                   maxTokens: maxTokens,
                                   presencePenalty: presencePenalty,
                                   frequencyPenalty: frequencyPenalty,
-                                  logitBias: logitBias)
+                                  logitBias: logitBias,
+                                  tools: tools)
     }
     
     /// Send a Chat request to the OpenAI API with stream enabled

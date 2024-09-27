@@ -21,8 +21,8 @@ extension OpenAISwift {
     ///
     ///   - completionHandler: Returns an Assistant Object
 
-    public func createAssistant(model: String, name: String?, description: String?, instructions: String?, tools: [Tools]?, file_ids: [String]?, metadata: [String:String]?, completionHandler: @escaping (Result<OpenAI<UrlResult>, OpenAIError>) -> Void) {
-        
+    public func createAssistant(model: String, name: String?, description: String?, instructions: String?, tools: [Tool]?, file_ids: [String]?, metadata: [String:String]?, completionHandler: @escaping (Result<OpenAI<UrlResult>, OpenAIError>) -> Void) {
+
         let endpoint = OpenAIEndpointProvider.API.assistant_create
         let body = AssistantBody(model: model, name: name, description: description, instructions: instructions, tools: tools, file_ids: file_ids, metadata: metadata)
         let request = prepareRequest(endpoint, body: body, queryItems: nil)
@@ -86,7 +86,7 @@ extension OpenAISwift {
     ///
     ///   - completionHandler: Returns an Assistant Object
 
-    public func modifyAssistant(assistant_id: String, model: String, name: String?, description: String?, instructions: String?, tools: [Tools]?, file_ids: [String]?, metadata: [String:String]?, completionHandler: @escaping (Result<OpenAI<UrlResult>, OpenAIError>) -> Void) {
+    public func modifyAssistant(assistant_id: String, model: String, name: String?, description: String?, instructions: String?, tools: [Tool]?, file_ids: [String]?, metadata: [String:String]?, completionHandler: @escaping (Result<OpenAI<UrlResult>, OpenAIError>) -> Void) {
         
         let endpoint = OpenAIEndpointProvider.API.assistant_modify
         let body = AssistantBody(model: model, name: name, description: description, instructions: instructions, tools: tools, file_ids: file_ids, metadata: metadata)
